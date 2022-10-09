@@ -6,6 +6,6 @@ RUN pecl install xdebug
 # The base image does not have php.ini. 
 # Copy our own, with xdebug settings
 
-COPY ./config/php.ini /usr/local/etc/php/
+COPY ./_config/php.ini /usr/local/etc/php/
 
 EXPOSE 80
