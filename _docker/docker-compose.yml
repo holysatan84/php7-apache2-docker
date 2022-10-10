@@ -1,19 +1,30 @@
-version: "3.7"
+version: '3.8'
 
-services: 
-  php7-apache2:
-    build: .
-    container_name: php7-apache2
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: php-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ../src:/var/www
+  nginx-web:
+    image: nginx:1.19-alpine
+    container_name: nginx-web
+    restart: always
     ports:
-      - '80:80'
-    volumes: 
-      - ../src:/var/www/html
-      
+      - 80:80
+    volumes:
+      - ../src:/var/www
+      - ./_config/_nginx:/etc/nginx/conf.d
+
   mysql-db:
     image: mariadb 
     container_name: mysql-db
     volumes:
-        - score_dbdata:/var/lib/mysql
+        - dbdata:/var/lib/mysql
         - ./init:/docker-entrypoint-initdb.d
     hostname: mysql-db
     expose:
@@ -28,5 +39,10 @@ services:
     command: mysqld --sql_mode=""
     ports:
         - "31003:3306"
+
+networks:
+  default:
+    name: app_main_network
+
 volumes:
-  score_dbdata:
+  dbdata:
