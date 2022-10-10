@@ -1,11 +1,13 @@
-FROM php:7.4-apache 
+FROM php:8.1.11-fpm
 
-RUN apt-get update
-RUN apt-get install -y apt-utils vim curl sqlite3
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    zip \
+    vim \
+    unzip
 RUN pecl install xdebug
-# The base image does not have php.ini. 
-# Copy our own, with xdebug settings
 
-COPY ./_config/php.ini /usr/local/etc/php/
+WORKDIR /var/www
 
 EXPOSE 80
